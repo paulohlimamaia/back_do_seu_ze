@@ -1,27 +1,56 @@
-version: "3"
+version: "3.8"
 
 services:
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    networks:
+      - app-network
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  stock-service:
+    image: deliverymuch/backend-challenge:stock-service
+    networks:
+      - app-network
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
+    restart: on-failure
+
   back_ze:
     build:
       context: .
     ports:
       - '3000:3000'
     container_name: back_ze
+    networks:
+      - app-network
     restart: always
     volumes:
       - ./:/usr/src/node-api/
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
     depends_on:
       - postgres
-    command: sh -c "npm install && npm run build && npm run start:prod"
+    command: sh -c "npm install && npm run start:dev"
+    
   postgres:
     image: postgres:alpine
     ports:
       - '5432:5432'
     container_name: "postgres"
+    networks:
+      - app-network
     restart: always
     environment:
       POSTGRES_USER: pguser
       POSTGRES_PASSWORD: pgpass
       POSTGRES_DB: ze
+
+networks:
+  app-network:
+    driver: bridge

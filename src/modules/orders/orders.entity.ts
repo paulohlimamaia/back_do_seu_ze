@@ -6,19 +6,24 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
-import Products from '../products/products.entity';
+import OrderProducts from '../orderProducts/orderProducts.entity';
 
 @Entity()
-export default class Canal extends BaseEntity {
+export default class Orders extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(() => Products, (products: Products) => products.id)
-  public products: Products[];
+  @OneToMany(
+    () => OrderProducts,
+    (orderProducts: OrderProducts) => orderProducts.id,
+  )
+  @JoinColumn()
+  orderProducts: OrderProducts[];
 
   @Column({ nullable: false, type: 'float' })
-  public total: number;
+  total: number;
 
   @CreateDateColumn()
   createdAt: Date;

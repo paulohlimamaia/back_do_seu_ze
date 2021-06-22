@@ -8,18 +8,18 @@ import {
 } from 'typeorm';
 
 @Entity()
-export default class Canal extends BaseEntity {
+export default class Products extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false, type: 'varchar' })
-  public name: string;
+  @Column({ nullable: false, type: 'varchar', unique: true })
+  name: string;
 
   @Column({ nullable: false, type: 'float' })
-  public price: number;
+  price: number;
 
   @Column({ nullable: false, type: 'integer' })
-  public quantity: number;
+  quantity: number;
 
   @CreateDateColumn()
   createdAt: Date;

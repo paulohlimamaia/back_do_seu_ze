@@ -18,4 +18,12 @@ export default class OrderService {
   async createOrder(order: OrdersDto): Promise<Orders> {
     return this.ordersRepository.createOrder(order);
   }
+
+  async getOrders(): Promise<Orders[]> {
+    return this.ordersRepository.getOrders();
+  }
+
+  async getOrder(orderId: string): Promise<Orders> {
+    return this.ordersRepository.getOrder(orderId);
+  }
 }
