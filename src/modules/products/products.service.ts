@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,7 +34,9 @@ export default class ProductsService {
     });
 
     amqp
-      .connect('amqp://guest:guest@rabbitmq:5672')
+      .connect(
+        `amqp://${process.env.USER_RABBITMQ}:${process.env.PASS_RABBITMQ}@${process.env.HOST_RABBITMQ}:5672`,
+      )
       .then(function (conn) {
         process.once('SIGINT', function () {
           conn.close();

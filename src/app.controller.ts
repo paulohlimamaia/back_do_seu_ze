@@ -24,10 +24,15 @@ export class AppController {
   async getProductByName(@Param() params): Promise<any> {
     const product = await this.productsService.getProduct(params.name);
 
+    const lastUpdate = new Date(product.updatedAt);
+
     return {
       name: product.name,
       price: product.price,
       quantity: product.quantity,
+      last_update: lastUpdate.toLocaleString('pt-BR', {
+        timeZone: 'America/Fortaleza',
+      }),
     };
   }
 
